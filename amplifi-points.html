@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=430, initial-scale=1.0" />
+  <title>AmpliFi – My Points</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      width: 430px;
+      height: 932px;
+      overflow: hidden;
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* ══ PHONE FRAME ══ */
+    .phone-frame {
+      width: 430px;
+      height: 932px;
+      background: linear-gradient(248.5deg, #474748 4.28%, #191919 73.04%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* ══ WHITE CARD (slides up from top:56px) ══ */
+    .white-card {
+      position: absolute;
+      top: 56px;
+      left: 0;
+      width: 430px;
+      height: 876px;
+      background: #fff;
+      border-radius: 32px 32px 0 0;
+      overflow: hidden;
+    }
+
+    /* Scrollable area inside white card */
+    .scroll-area {
+      position: absolute;
+      inset: 0;
+      overflow-y: auto;
+      overflow-x: hidden;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .scroll-area::-webkit-scrollbar { display: none; }
+
+    /* Inner wrapper — explicit height so absolute children enable scroll */
+    .inner {
+      position: relative;
+      width: 430px;
+      height: 900px;
+    }
+
+    /* ── Top bar ── */
+    .top-bar {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      width: 398px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .pill-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 12px;
+      border-radius: 1000px;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .close-btn {
+      background: #f4f4f5;
+    }
+    .close-btn img { width: 16px; height: 16px; display: block; }
+
+    .right-pill {
+      background: white;
+      border: 1px solid #f0f0f0;
+    }
+    .right-pill img { width: 16px; height: 16px; display: block; }
+
+    .page-title {
+      font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 18px;
+      font-weight: 600;
+      color: #37394a;
+      white-space: nowrap;
+    }
+
+    /* ── Dark inner card ── */
+    .dark-inner-card {
+      position: absolute;
+      top: 74px;
+      left: 16px;
+      width: 398px;
+      height: 145px;
+      background: linear-gradient(203deg, #474748 4.28%, #191919 73.04%);
+      border-radius: 16px;
+    }
+
+    /* ── TruWest logo (overlaid on dark card) ── */
+    .truwest-logo-wrap {
+      position: absolute;
+      top: 90px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    .truwest-logo-wrap img {
+      height: 40px;
+      width: auto;
+      display: block;
+    }
+
+    /* ── Points row ── */
+    .points-row {
+      position: absolute;
+      top: 146px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+    }
+    .points-row .coin-icon { width: 32px; height: 32px; display: block; }
+    .points-text {
+      font-family: 'Inter', sans-serif;
+      font-size: 32px;
+      font-weight: 700;
+      color: #fff;
+      line-height: 26px;
+      white-space: nowrap;
+    }
+
+    /* ── Pending text ── */
+    .pending-text {
+      position: absolute;
+      top: 186px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: 'Inter', sans-serif;
+      font-style: italic;
+      font-size: 14px;
+      font-weight: 400;
+      color: rgba(255,255,255,0.8);
+      text-align: center;
+      white-space: nowrap;
+      line-height: 18px;
+    }
+
+    /* ── Tab bar ── */
+    .tab-bar {
+      position: absolute;
+      top: 235px;
+      left: 16px;
+      width: 398px;
+      height: 52px;
+      background: #f4f4f5;
+      border-radius: 1000px;
+      display: flex;
+      gap: 8px;
+      padding: 4px;
+    }
+
+    .tab {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 44px;
+      border-radius: 80px;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      line-height: 20px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .tab.active {
+      background: #fff;
+      color: #000;
+      font-weight: 600;
+      box-shadow: 0px 1px 2px rgba(0,0,0,0.04);
+      border: 1px solid #ebeff3;
+    }
+    .tab.inactive {
+      background: transparent;
+      color: #808898;
+      font-weight: 400;
+    }
+
+    /* ── Section labels ── */
+    .section-label {
+      position: absolute;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: #000;
+      line-height: 20px;
+    }
+    .label-redeem { top: 303px; left: 16px; }
+    .label-earn   { top: 788px; left: 16px; }
+
+    /* ── Card images strip ── */
+    .card-images-strip {
+      position: absolute;
+      top: 335px;
+      left: 16px;
+      width: 398px;
+      height: auto;
+      display: block;
+      border-radius: 8px;
+    }
+
+    /* ── Redeem cards ── */
+    .redeem-card {
+      position: absolute;
+      left: 16px;
+      width: 398px;
+      background: #f5f5f5;
+      border: 1.179px solid #f2f2f2;
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .redeem-card-1 { top: 388px; z-index: 2; }
+    .redeem-card-2 { top: 524px; }
+    .redeem-card-3 { top: 644px; }
+
+    .redeem-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 24px;
+    }
+
+    .redeem-card-title {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .redeem-card-title img {
+      width: 24px;
+      height: 24px;
+      display: block;
+    }
+    .redeem-card-title span {
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: #000;
+      line-height: 20px;
+      white-space: nowrap;
+    }
+
+    .badge-best-value {
+      background: #c1dd97;
+      color: #3b6d11;
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      font-weight: 500;
+      line-height: 1.3;
+      padding: 3px 6px;
+      border-radius: 100px;
+      white-space: nowrap;
+    }
+
+    .redeem-card-desc {
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      font-weight: 400;
+      color: #000;
+      line-height: 16px;
+    }
+    .redeem-card-desc strong { font-weight: 700; }
+
+    .redeem-link {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      font-weight: 800;
+      color: #a7ad37;
+      line-height: 22px;
+      text-decoration: none;
+    }
+    .redeem-link img { width: 24px; height: 24px; display: block; }
+
+    /* ── Browser bar ── */
+    .browser-bar {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 430px;
+      height: 52px;
+      background: rgba(249, 249, 249, 0.94);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      box-shadow: inset 0px 0.33px 0px 0px rgba(0, 0, 0, 0.3);
+    }
+
+    .browser-bar-domain {
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 3px;
+    }
+    .browser-bar-domain img { width: 6.226px; height: 9.058px; }
+
+    .browser-bar-url {
+      font-family: 'SF Pro Display', -apple-system, sans-serif;
+      font-size: 12.66px;
+      color: #000;
+      letter-spacing: 0.1266px;
+      white-space: nowrap;
+    }
+
+    .browser-bar-indicator {
+      position: absolute;
+      bottom: 7px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 139px;
+      height: 5px;
+      background: #000;
+      border-radius: 2.5px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="phone-frame">
+
+  <!-- ══ WHITE CARD ══ -->
+  <div class="white-card">
+    <div class="scroll-area">
+      <div class="inner">
+
+        <!-- Top bar -->
+        <div class="top-bar">
+          <a class="pill-btn close-btn" href="amplifi-home.html" aria-label="Back">
+            <img src="https://www.figma.com/api/mcp/asset/b6ba88cd-d3ea-4057-8c01-2873be358408" alt="close" />
+          </a>
+          <span class="page-title">My Points</span>
+          <div class="pill-btn right-pill">
+            <img src="https://www.figma.com/api/mcp/asset/c205106b-806a-4021-bac9-df3c37b0c0ec" alt="" />
+          </div>
+        </div>
+
+        <!-- Dark inner card -->
+        <div class="dark-inner-card"></div>
+
+        <!-- TruWest logo (on dark card) -->
+        <div class="truwest-logo-wrap">
+          <img src="-assets/TruWest%20Logo.png" alt="TruWest Credit Union" />
+        </div>
+
+        <!-- Points row -->
+        <div class="points-row">
+          <img src="-assets/toll.svg" class="coin-icon" alt="" />
+          <span class="points-text">15,000 points</span>
+        </div>
+
+        <!-- Pending text -->
+        <p class="pending-text">670 pending • Last updated June 12, 2026</p>
+
+        <!-- Tab bar -->
+        <div class="tab-bar">
+          <div class="tab active">How it works</div>
+          <div class="tab inactive">History</div>
+        </div>
+
+        <!-- Ways to redeem -->
+        <p class="section-label label-redeem">Ways to redeem</p>
+
+        <!-- Card images strip -->
+        <img class="card-images-strip" src="-assets/gift-cards.png" alt="Gift cards" />
+
+        <!-- Redeem card 1: Boosted gift cards -->
+        <div class="redeem-card redeem-card-1">
+          <div class="redeem-card-header">
+            <div class="redeem-card-title">
+              <img src="https://www.figma.com/api/mcp/asset/98779b8c-699d-4f29-a504-94db7c144464" alt="" />
+              <span>Boosted gift cards</span>
+            </div>
+            <div class="badge-best-value">Best value</div>
+          </div>
+          <p class="redeem-card-desc">Get up to <strong>10% more value</strong> with select merchant partners. Your 15,000 pts could be worth up to <strong>$165</strong>.</p>
+          <a class="redeem-link" href="#">
+            Browse boosted gift cards
+            <img src="https://www.figma.com/api/mcp/asset/aef8df0f-9cf6-4cd9-82cf-10ec64307042" alt="" />
+          </a>
+        </div>
+
+        <!-- Redeem card 2: Cash out -->
+        <div class="redeem-card redeem-card-2">
+          <div class="redeem-card-header">
+            <div class="redeem-card-title">
+              <img src="https://www.figma.com/api/mcp/asset/5fd4157e-d581-48ab-af9c-1626ecf9679e" alt="" />
+              <span>Cash out</span>
+            </div>
+          </div>
+          <p class="redeem-card-desc">Turn your points into cash deposited to your bank account.</p>
+          <a class="redeem-link" href="amplifi-cashout.html">
+            Convert points to cash
+            <img src="https://www.figma.com/api/mcp/asset/aef8df0f-9cf6-4cd9-82cf-10ec64307042" alt="" />
+          </a>
+        </div>
+
+        <!-- Redeem card 3: Merchandise & experiences -->
+        <div class="redeem-card redeem-card-3">
+          <div class="redeem-card-header">
+            <div class="redeem-card-title">
+              <img src="https://www.figma.com/api/mcp/asset/18789715-f81f-4a80-acd9-7020756c57eb" alt="" />
+              <span>Merchandise &amp; experiences</span>
+            </div>
+          </div>
+          <p class="redeem-card-desc">Exclusive options to maximize your points for merchandise and experiences.</p>
+          <a class="redeem-link" href="#">
+            Browse catalog
+            <img src="https://www.figma.com/api/mcp/asset/aef8df0f-9cf6-4cd9-82cf-10ec64307042" alt="" />
+          </a>
+        </div>
+
+        <!-- Ways to earn -->
+        <p class="section-label label-earn">Ways to earn</p>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ BROWSER BAR ══ -->
+  <div class="browser-bar">
+    <div class="browser-bar-domain">
+      <img src="https://www.figma.com/api/mcp/asset/255c3b69-4dac-40c5-bed4-86041ccc7905" alt="" />
+      <span class="browser-bar-url">url.com</span>
+    </div>
+    <div class="browser-bar-indicator"></div>
+  </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=430, initial-scale=1.0">
+  <title>AmpliFI – Concierge</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Onest:wght@600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      width: 430px;
+      height: 932px;
+      overflow: hidden;
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* ══ PHONE FRAME ══ */
+    .phone-frame {
+      width: 430px;
+      height: 932px;
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(248.48deg, #474748 4.28%, #191919 73.04%);
+    }
+
+    /* ══ PAGE HEADER ══ */
+    .page-header {
+      position: absolute;
+      top: 52px;
+      left: 16px;
+      width: 398px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .points-pill {
+      background: rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 12px;
+      border-radius: 16px;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .points-pill-text {
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      font-size: 14.299px;
+      line-height: 20.427px;
+      color: white;
+      white-space: nowrap;
+    }
+
+    /* ══ WHITE CARD ══ */
+    .white-card {
+      position: absolute;
+      top: 142px;
+      left: 0;
+      width: 430px;
+      height: 790px;
+      border-radius: 24px 24px 0 0;
+      background: white;
+      overflow: hidden;
+    }
+
+    /* ── Concierge top header ── */
+    .concierge-top {
+      position: absolute;
+      top: 23px;
+      left: 16px;
+      width: 398px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      z-index: 2;
+      background: white;
+    }
+
+    .concierge-row {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+    }
+
+    .concierge-avatar {
+      width: 47.999px;
+      height: 47.999px;
+      background: #2a7caa;
+      border-radius: 34.286px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      overflow: hidden;
+      position: relative;
+      box-shadow: inset 0px -4.571px 5.714px 0px rgba(255, 255, 255, 0.65);
+    }
+
+    .concierge-avatar img {
+      width: 25.143px;
+      height: 25.143px;
+      display: block;
+      object-fit: contain;
+    }
+
+    .concierge-info {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      min-width: 0;
+    }
+
+    .concierge-name {
+      font-family: 'Onest', 'Inter', sans-serif;
+      font-weight: 600;
+      font-size: 14px;
+      line-height: 1;
+      color: #0e121b;
+    }
+
+    .concierge-subtitle {
+      font-family: 'Inter', sans-serif;
+      font-weight: 400;
+      font-size: 12px;
+      line-height: 16px;
+      color: rgba(0, 0, 0, 0.8);
+    }
+
+    .concierge-divider {
+      width: 100%;
+      height: 0;
+      border-top: 0.5px solid rgba(163, 172, 185, 0.5);
+      flex-shrink: 0;
+    }
+
+    /* ── Initial state: heading ── */
+    .initial-state {
+      position: absolute;
+      top: 390px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 344px;
+      text-align: center;
+      transition: opacity 0.25s ease, transform 0.25s ease;
+    }
+
+    .initial-state.hidden {
+      opacity: 0;
+      pointer-events: none;
+      transform: translateX(-50%) translateY(-12px);
+    }
+
+    .main-heading {
+      font-family: 'Inter', sans-serif;
+      font-weight: 800;
+      font-size: 32px;
+      line-height: 38px;
+      color: black;
+    }
+
+    /* ── Chat area ── */
+    .chat-area {
+      position: absolute;
+      top: 83px;   /* below concierge header + divider */
+      left: 0;
+      width: 430px;
+      bottom: 219px; /* above input bar (572px from top of white-card, leave room) */
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: 12px 16px 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      scrollbar-width: none;
+    }
+
+    .chat-area::-webkit-scrollbar { display: none; }
+
+    .chat-area.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    /* Chat messages */
+    .msg-row {
+      display: flex;
+      align-items: flex-end;
+      gap: 8px;
+    }
+
+    .msg-row.user {
+      flex-direction: row-reverse;
+    }
+
+    .msg-avatar {
+      width: 32px;
+      height: 32px;
+      background: #2a7caa;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      box-shadow: inset 0px -2px 3px 0px rgba(255,255,255,0.65);
+    }
+
+    .msg-avatar img {
+      width: 16px;
+      height: 16px;
+      object-fit: contain;
+    }
+
+    .msg-bubble {
+      max-width: 296px;
+      padding: 12px 14px;
+      border-radius: 18px;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      line-height: 20px;
+      color: #0e121b;
+    }
+
+    .msg-row.ai .msg-bubble {
+      background: #f5f6f8;
+      border-bottom-left-radius: 4px;
+    }
+
+    .msg-row.user .msg-bubble {
+      background: #1c1c1c;
+      color: white;
+      border-bottom-right-radius: 4px;
+    }
+
+    .msg-bubble b {
+      font-weight: 700;
+    }
+
+    .msg-bubble .msg-section {
+      margin-bottom: 8px;
+    }
+
+    .msg-bubble .msg-section:last-child {
+      margin-bottom: 0;
+    }
+
+    .msg-bubble .msg-item {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 4px;
+    }
+
+    .msg-bubble .msg-cta {
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid rgba(0,0,0,0.08);
+      font-weight: 500;
+      color: #2784bf;
+    }
+
+    /* Typing indicator */
+    .typing-row {
+      display: flex;
+      align-items: flex-end;
+      gap: 8px;
+    }
+
+    .typing-bubble {
+      background: #f5f6f8;
+      border-radius: 18px;
+      border-bottom-left-radius: 4px;
+      padding: 14px 18px;
+      display: flex;
+      gap: 5px;
+      align-items: center;
+    }
+
+    .typing-dot {
+      width: 6px;
+      height: 6px;
+      background: #a3acb9;
+      border-radius: 50%;
+      animation: typingBounce 1.2s infinite ease-in-out;
+    }
+
+    .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+    .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+    @keyframes typingBounce {
+      0%, 60%, 100% { transform: translateY(0); }
+      30% { transform: translateY(-5px); }
+    }
+
+    /* ── Input bar ── */
+    .input-bar {
+      position: absolute;
+      top: 571px;
+      left: 0;
+      width: 430px;
+      background: white;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      z-index: 3;
+    }
+
+    .input-field { flex: 1; min-width: 0; }
+
+    .input-inner {
+      background: white;
+      border: 1px solid rgba(163, 172, 185, 0.5);
+      border-radius: 12px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      width: 100%;
+      transition: border-color 0.15s ease;
+    }
+
+    .input-inner:focus-within {
+      border-color: #2784bf;
+    }
+
+    .input-content {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+    }
+
+    .input-icon-wrap {
+      width: 24px;
+      height: 24px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .input-icon-wrap img {
+      position: absolute;
+      top: 20.83%; left: 20.83%; right: 20.83%; bottom: 20.83%;
+      width: 58.33%; height: 58.33%;
+      object-fit: contain;
+    }
+
+    .input-icon-wrap.mic img {
+      top: 10.42%; left: 20.83%; right: 20.83%; bottom: 10.42%;
+      width: 58.33%; height: 79.17%;
+    }
+
+    /* Real text input */
+    .chat-input-field {
+      flex: 1;
+      border: none;
+      outline: none;
+      background: transparent;
+      font-family: 'Inter', sans-serif;
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 24px;
+      color: #0e121b;
+      min-width: 0;
+    }
+
+    .chat-input-field::placeholder {
+      color: #a3acb9;
+    }
+
+    /* Send button (replaces mic when input has text) */
+    .send-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #2784bf;
+      border: none;
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: transform 0.1s ease;
+    }
+
+    .send-btn:active { transform: scale(0.92); }
+
+    .send-btn svg {
+      width: 16px;
+      height: 16px;
+      fill: white;
+    }
+
+    .send-btn.visible { display: flex; }
+
+    .input-icon-wrap.mic.hidden { display: none; }
+
+    /* ── Nav footer (SVG pill, same technique as home page) ── */
+    /* Only the browser-bar contributes height; SVG floats absolutely above */
+    .nav-footer {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 430px;
+      height: 52px;
+      z-index: 10;
+    }
+
+    /* bottom-nav-concierge.svg: 511×230 viewBox, pill at y=66–128, no gradient.
+       bottom:-42px places transparent shadow buffer below frame (clipped).
+       Pill lands 8px above browser bar top. */
+    .bottom-nav-svg {
+      display: block;
+      width: 511px;
+      position: absolute;
+      left: -40.5px;
+      bottom: -42px;
+      pointer-events: none;
+    }
+
+    /* ── Browser bar ── */
+    .browser-bar {
+      width: 430px;
+      height: 52px;
+      background: rgba(249, 249, 249, 0.94);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      box-shadow: inset 0px 0.33px 0px 0px rgba(0, 0, 0, 0.3);
+      position: relative;
+    }
+
+    .browser-bar-domain {
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 3px;
+    }
+
+    .browser-bar-domain img { width: 6.226px; height: 9.058px; }
+
+    .browser-bar-url {
+      font-family: 'SF Pro Display', sans-serif;
+      font-size: 12.66px;
+      line-height: normal;
+      color: black;
+      letter-spacing: 0.1266px;
+      white-space: nowrap;
+    }
+
+    .browser-bar-indicator {
+      position: absolute;
+      bottom: 7px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 139px;
+      height: 5px;
+      background: black;
+      border-radius: 2.5px;
+    }
+
+    /* ══ SUGGESTION CHIPS — horizontal scroll ══ */
+    .suggestion-chips {
+      position: absolute;
+      top: 640px;
+      left: 0;
+      width: 430px;
+      overflow-x: auto;
+      overflow-y: visible;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      display: flex;
+      gap: 12px;
+      padding: 0 17px;
+      align-items: stretch;
+      transition: opacity 0.25s ease, transform 0.25s ease;
+    }
+
+    .suggestion-chips::-webkit-scrollbar { display: none; }
+
+    .suggestion-chips.hidden {
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(8px);
+    }
+
+    .chip {
+      background: #f5f5f5;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding: 10px 12px;
+      border-radius: 16px;
+      min-width: 148px;
+      flex-shrink: 0;
+      cursor: pointer;
+      transition: background 0.15s ease;
+      user-select: none;
+    }
+
+    .chip:active { background: #e8e8e8; }
+
+    /* Last chip needs right padding so it doesn't butt the edge */
+    .chip:last-child { margin-right: 17px; }
+
+    .chip-title {
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      font-size: 13px;
+      line-height: 1.2;
+      color: #0a0a0a;
+    }
+
+    .chip-subtitle {
+      font-family: 'Inter', sans-serif;
+      font-weight: 400;
+      font-size: 12px;
+      line-height: 1.2;
+      color: #757575;
+    }
+  </style>
+</head>
+<body>
+<div class="phone-frame">
+
+  <!-- ══ PAGE HEADER ══ -->
+  <div class="page-header">
+    <img src="-assets/TruWest%20Logo.png" alt="TruWest Credit Union" style="height:60.355px;width:auto;" />
+    <div class="points-pill">
+      <img src="-assets/toll.svg" alt="" style="width:20px;height:20px;flex-shrink:0;" />
+      <span class="points-pill-text">15,000 points</span>
+    </div>
+  </div>
+
+  <!-- ══ WHITE CARD ══ -->
+  <div class="white-card">
+
+    <!-- Concierge title row + divider -->
+    <div class="concierge-top">
+      <div class="concierge-row">
+        <div class="concierge-avatar">
+          <img src="https://www.figma.com/api/mcp/asset/11283fcb-303e-4d31-ac84-7aa1231d8274" alt="" />
+        </div>
+        <div class="concierge-info">
+          <p class="concierge-name">Rewards concierge</p>
+          <p class="concierge-subtitle">Chat with me</p>
+        </div>
+      </div>
+      <div class="concierge-divider"></div>
+    </div>
+
+    <!-- Chat messages (hidden until first message) -->
+    <div class="chat-area" id="chatArea"></div>
+
+    <!-- Initial heading (hidden once chat starts) -->
+    <div class="initial-state" id="initialState">
+      <p class="main-heading">How can I help you save today?</p>
+    </div>
+
+    <!-- Input bar -->
+    <div class="input-bar">
+      <div class="input-field">
+        <div class="input-inner">
+          <div class="input-content">
+            <div class="input-icon-wrap">
+              <img src="https://www.figma.com/api/mcp/asset/73913bba-3505-414a-bba4-6b61cc4008dd" alt="" />
+            </div>
+            <input
+              class="chat-input-field"
+              id="chatInput"
+              type="text"
+              placeholder="Ask me anything"
+              autocomplete="off"
+              autocorrect="off"
+              spellcheck="false"
+            />
+          </div>
+          <div class="input-icon-wrap mic" id="micIcon">
+            <img src="https://www.figma.com/api/mcp/asset/cedfb47c-f636-4bcb-b420-af01427ecb50" alt="" />
+          </div>
+          <button class="send-btn" id="sendBtn" type="button" aria-label="Send">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /white-card -->
+
+  <!-- ══ NAV FOOTER (SVG pill) ══ -->
+  <div class="nav-footer">
+    <img src="-assets/bottom-nav-concierge.svg" class="bottom-nav-svg" alt="" />
+    <!-- Transparent overlay: home icon (SVG x≈84–137 → viewport x=43–97, top=−70px relative to nav-footer) -->
+    <a href="amplifi-home.html"
+       style="position:absolute; left:43px; top:-70px; width:54px; height:62px; z-index:20; cursor:pointer;"
+       aria-label="Home"></a>
+    <div class="browser-bar">
+      <div class="browser-bar-domain">
+        <img src="https://www.figma.com/api/mcp/asset/c10668b8-3dbe-4b47-a5ad-4a1839b313ba" alt="" />
+        <span class="browser-bar-url">url.com</span>
+      </div>
+      <div class="browser-bar-indicator"></div>
+    </div>
+  </div>
+
+  <!-- ══ SUGGESTION CHIPS — horizontal scroll ══ -->
+  <div class="suggestion-chips" id="suggestionChips">
+    <div class="chip" onclick="sendMessage('Stretch my points')">
+      <p class="chip-title">Stretch my points</p>
+      <p class="chip-subtitle">Ideas for points maximization</p>
+    </div>
+    <div class="chip" onclick="sendMessage('Gear for my 10K')">
+      <p class="chip-title">Gear for my 10K</p>
+      <p class="chip-subtitle">Running + recovery recommendations</p>
+    </div>
+    <div class="chip" onclick="sendMessage('Family cabin search')">
+      <p class="chip-title">Family cabin search</p>
+      <p class="chip-subtitle">Plan a trip to the north shore</p>
+    </div>
+  </div>
+
+</div><!-- /phone-frame -->
+
+<script>
+  const chatArea    = document.getElementById('chatArea');
+  const initialState = document.getElementById('initialState');
+  const chips       = document.getElementById('suggestionChips');
+  const input       = document.getElementById('chatInput');
+  const sendBtn     = document.getElementById('sendBtn');
+  const micIcon     = document.getElementById('micIcon');
+
+  let chatStarted = false;
+
+  /* ── Toggle send/mic button ── */
+  input.addEventListener('input', () => {
+    const hasText = input.value.trim().length > 0;
+    sendBtn.classList.toggle('visible', hasText);
+    micIcon.classList.toggle('hidden', hasText);
+  });
+
+  /* ── Send on Enter ── */
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && input.value.trim()) {
+      e.preventDefault();
+      sendMessage(input.value.trim());
+    }
+  });
+
+  sendBtn.addEventListener('click', () => {
+    if (input.value.trim()) sendMessage(input.value.trim());
+  });
+
+  /* ── Main send function ── */
+  function sendMessage(text) {
+    if (!text.trim()) return;
+
+    // Enter chat mode on first message
+    if (!chatStarted) {
+      chatStarted = true;
+      initialState.classList.add('hidden');
+      chips.classList.add('hidden');
+      chatArea.classList.add('visible');
+    }
+
+    // Add user bubble
+    addBubble('user', text);
+    input.value = '';
+    sendBtn.classList.remove('visible');
+    micIcon.classList.remove('hidden');
+
+    // Show typing indicator then respond
+    const typingEl = addTyping();
+    scrollToBottom();
+
+    setTimeout(() => {
+      typingEl.remove();
+      addBubble('ai', getResponse(text));
+      scrollToBottom();
+    }, 1400 + Math.random() * 600);
+  }
+
+  /* ── Bubble builders ── */
+  function addBubble(who, text) {
+    const row = document.createElement('div');
+    row.className = `msg-row ${who}`;
+
+    if (who === 'ai') {
+      const av = document.createElement('div');
+      av.className = 'msg-avatar';
+      av.innerHTML = `<img src="https://www.figma.com/api/mcp/asset/11283fcb-303e-4d31-ac84-7aa1231d8274" alt="" />`;
+      row.appendChild(av);
+    }
+
+    const bubble = document.createElement('div');
+    bubble.className = 'msg-bubble';
+    bubble.innerHTML = who === 'ai' ? text : escHtml(text);
+    row.appendChild(bubble);
+    chatArea.appendChild(row);
+  }
+
+  function addTyping() {
+    const row = document.createElement('div');
+    row.className = 'typing-row';
+    row.innerHTML = `
+      <div class="msg-avatar">
+        <img src="https://www.figma.com/api/mcp/asset/11283fcb-303e-4d31-ac84-7aa1231d8274" alt="" />
+      </div>
+      <div class="typing-bubble">
+        <div class="typing-dot"></div>
+        <div class="typing-dot"></div>
+        <div class="typing-dot"></div>
+      </div>`;
+    chatArea.appendChild(row);
+    return row;
+  }
+
+  function scrollToBottom() {
+    chatArea.scrollTop = chatArea.scrollHeight;
+  }
+
+  function escHtml(s) {
+    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  /* ── AI response logic ── */
+  function getResponse(text) {
+    const t = text.toLowerCase();
+    if (t.includes('stretch') || t.includes('maximiz') || t.includes('most of my points'))
+      return RESPONSES.stretch;
+    if (t.includes('10k') || t.includes('10 k') || t.includes('gear') || t.includes('run') || t.includes('shoes') || t.includes('hoka') || t.includes('recovery'))
+      return RESPONSES.gear;
+    if (t.includes('cabin') || t.includes('north shore') || t.includes('trip') || t.includes('travel') || t.includes('vacation') || t.includes('family'))
+      return RESPONSES.cabin;
+    if (t.includes('cash') || t.includes('redeem') || t.includes('worth') || t.includes('value'))
+      return RESPONSES.value;
+    if (t.includes('flight') || t.includes('delta') || t.includes('hotel') || t.includes('fly'))
+      return RESPONSES.travel;
+    if (t.includes('walmart') || t.includes('gift card') || t.includes('grocery') || t.includes('shopping'))
+      return RESPONSES.giftcards;
+    return RESPONSES.default;
+  }
+
+  const RESPONSES = {
+
+    stretch: `Here's how to squeeze the most out of your <b>15,000 points</b>:
+<br><br>
+<div class="msg-section">
+  <div class="msg-item">🎁 <span><b>Gift cards</b> — up to 25% more value than cash back. Target, Amazon, Starbucks, and more.</span></div>
+  <div class="msg-item">✈️ <span><b>Travel</b> — book through TruWest for up to <b>2× value</b>. Your 15k could be worth <b>$300</b> toward flights or hotels.</span></div>
+  <div class="msg-item">⚡ <span><b>Boosted this week</b> — Walmart Gift Cards (+10%) and Delta Seat Upgrades are live right now.</span></div>
+</div>
+<div class="msg-cta">What would you like to redeem for? I can find the best deal. →</div>`,
+
+    gear: `Let's get you race-ready! 🏃‍♀️ Here's what your points can do:
+<br><br>
+<div class="msg-section">
+  <div class="msg-item">👟 <span><b>On Running Cloud Series</b> — $150 off. One of our most-redeemed picks right now.</span></div>
+  <div class="msg-item">👟 <span><b>Hoka Speedgoat 5</b> — $60 off trail shoes, great for long training runs.</span></div>
+  <div class="msg-item">🎧 <span><b>Beats Studio Headphones</b> — $40 off for race-day motivation.</span></div>
+  <div class="msg-item">💪 <span><b>Lululemon</b> — 25% off accessories & bags for recovery.</span></div>
+</div>
+Your 15,000 points cover most of a new pair of running shoes outright.
+<div class="msg-cta">Want me to add something to your cart? →</div>`,
+
+    cabin: `Let's plan that north shore getaway! 🌲
+<br><br>
+<div class="msg-section">
+  <div class="msg-item">🏡 <span><b>Cabin Vacations</b> is a boosted partner this week — perfect timing to redeem.</span></div>
+  <div class="msg-item">✈️ <span><b>Delta flights</b> — seat upgrades available with your points. Minneapolis → Duluth routes are open.</span></div>
+  <div class="msg-item">🚗 <span><b>Rental car</b> — apply points toward a vehicle for the full trip.</span></div>
+</div>
+💡 <b>Tip:</b> Travel redemptions give up to <b>2× value</b> vs. cash back — your 15k is worth ~$300 toward the trip.
+<div class="msg-cta">Want me to check cabin availability or flight prices? →</div>`,
+
+    value: `Great question! Here's what your <b>15,000 points</b> are worth:
+<br><br>
+<div class="msg-section">
+  <div class="msg-item">💵 <span><b>Cash back</b> — $150 (baseline value)</span></div>
+  <div class="msg-item">🎁 <span><b>Gift cards</b> — up to <b>$187</b> with boosted partners (+25%)</span></div>
+  <div class="msg-item">✈️ <span><b>Travel</b> — up to <b>$300</b> when booked through TruWest (2× value)</span></div>
+  <div class="msg-item">⚡ <span><b>Boosted this week</b> — Walmart +10%, Delta Seat Upgrades</span></div>
+</div>
+Travel is almost always the best value. Want help finding a trip?`,
+
+    travel: `Your points are powerful for travel! ✈️
+<br><br>
+<div class="msg-section">
+  <div class="msg-item">🛫 <span><b>Delta</b> — Seat upgrades available this week with a redemption boost.</span></div>
+  <div class="msg-item">🏨 <span><b>Hotels</b> — Book through TruWest Travel for up to 2× point value.</span></div>
+  <div class="msg-item">🏡 <span><b>Cabin Vacations</b> — Boosted partner, great for weekend trips.</span></div>
+</div>
+<b>15,000 points = up to $300</b> in travel value when you book smart.
+<div class="msg-cta">Where are you headed? I'll find the best deal. →</div>`,
+
+    giftcards: `Gift cards are one of the smartest ways to redeem! 🎁
+<br><br>
+<div class="msg-section">
+  <div class="msg-item">🛒 <span><b>Walmart</b> — <b>+10% boost</b> active this week. Your 15k = $165 in Walmart gift cards.</span></div>
+  <div class="msg-item">📦 <span><b>Amazon, Target, Starbucks</b> — standard rates, wide selection.</span></div>
+  <div class="msg-item">🍽️ <span><b>Dining</b> — Local restaurant gift cards available through the Dining category.</span></div>
+</div>
+Always check for weekly boosts — they can add 10–25% more value to your redemption.
+<div class="msg-cta">Want to redeem for a specific brand? →</div>`,
+
+    default: `I'm here to help you get the most out of your <b>15,000 TruWest points</b>! 🌟
+<br><br>
+<div class="msg-section">
+  <div class="msg-item">🎁 <span>Find the best <b>gift cards</b> for what you need</span></div>
+  <div class="msg-item">✈️ <span>Plan <b>travel</b> and maximize point value (up to 2×)</span></div>
+  <div class="msg-item">👟 <span>Shop <b>top picks</b> from On Running, Hoka, Beats & more</span></div>
+  <div class="msg-item">⚡ <span>Catch this week's <b>boosted partners</b> before they expire</span></div>
+</div>
+What would you like to explore?`,
+
+  };
+</script>
+
+</body>
+</html>

@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=430, initial-scale=1.0" />
+  <title>TruWest Home</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      width: 430px;
+      height: 932px;
+      max-height: 932px;
+      overflow: hidden;
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* ══ PHONE SHELL ══ */
+    .phone-frame {
+      width: 430px;
+      height: 932px;
+      max-height: 932px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      background: linear-gradient(180deg, #474748 0%, #191919 100%);
+    }
+
+    /* ══ SCROLLABLE AREA ══ */
+    .scroll-area {
+      flex: 1;
+      min-height: 0;
+      overflow-y: auto;
+      overflow-x: hidden;
+      scrollbar-width: none;
+      /* gradient is on phone-frame; this is transparent */
+    }
+    .scroll-area::-webkit-scrollbar { display: none; }
+
+    /* ══ DARK HEADER (384px fixed) ══ */
+    .dark-header {
+      height: 384px;
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .logo-wrap {
+      position: absolute;
+      left: 16px;
+      top: 52px;
+    }
+
+    /* ── Points card ── */
+    .points-card {
+      position: absolute;
+      left: 16px;
+      top: 134px;
+      width: 398px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 20px 16px 20px 16px;
+      padding: 12px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .points-top-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 8px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .points-label {
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 18px;
+      color: rgba(255,255,255,0.8);
+      margin-bottom: 2px;
+    }
+
+    .points-value-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .points-big {
+      font-size: 18px;
+      font-weight: 700;
+      line-height: 26px;
+      color: white;
+      white-space: nowrap;
+    }
+
+    .how-it-works-btn {
+      background: rgba(254,254,254,0.1);
+      border: none;
+      border-radius: 32px;
+      padding: 8px 16px;
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 20px;
+      color: white;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+
+    .points-bottom-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .points-stat-label {
+      font-size: 12px;
+      font-weight: 600;
+      line-height: 18px;
+      color: rgba(255,255,255,0.8);
+      white-space: nowrap;
+    }
+
+    .points-stat-value {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* ── Concierge strip ── */
+    .concierge-strip {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 82px;
+      background: #383838;
+      border-radius: 24px 24px 0 0;
+      box-shadow: inset 4px 6px 6px 0px rgba(255,255,255,0.08);
+    }
+
+    .concierge-banner {
+      position: absolute;
+      top: 322px;
+      left: 16px;
+      width: 398px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .concierge-icon-wrap {
+      background: #2784bf;
+      border-radius: 30px;
+      padding: 10px;
+      flex-shrink: 0;
+      box-shadow: inset 0px -4px 5px 0px rgba(255,255,255,0.65);
+    }
+    .concierge-icon-wrap img { width: 22px; height: 22px; display: block; }
+
+    .concierge-text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+    .concierge-title  { font-size: 14px; font-weight: 600; line-height: 20px; color: white; white-space: nowrap; }
+    .concierge-subtitle { font-size: 12px; font-weight: 400; line-height: 16px; color: rgba(255,255,255,0.8); }
+    .concierge-arrow  { width: 16px; height: 16px; flex-shrink: 0; }
+
+    /* ══ WHITE CARD ══ */
+    .white-card {
+      background: white;
+      border-radius: 24px 24px 0 0;
+      padding: 24px 16px 32px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .section-title {
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 20px;
+      color: black;
+    }
+
+    /* ── Category grid ── */
+    .category-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-top: 8px;
+      margin-bottom: 20px;
+    }
+
+    .category-card {
+      background: #f4f4f5;
+      border: 1px solid #e9e9e9;
+      border-radius: 12px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .category-icon-wrap {
+      width: 52px;
+      height: 52px;
+      background: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .category-label {
+      font-size: 12px;
+      font-weight: 600;
+      line-height: 16px;
+      color: black;
+      text-align: center;
+    }
+
+    /* ── Section group ── */
+    .section-group {
+      margin-bottom: 20px;
+    }
+
+    /* ── Horizontal scroll rows ── */
+    .h-scroll {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      margin-top: 8px;
+    }
+    .h-scroll::-webkit-scrollbar { display: none; }
+
+    /* ── Top picks cards (300×127) ── */
+    .picks-card {
+      width: 300px;
+      height: 127px;
+      border-radius: 20px;
+      position: relative;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .picks-card-bg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .picks-card-overlay {
+      position: absolute;
+      inset: 0;
+    }
+
+    .picks-card-gradient-blue {
+      background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.4) 100%),
+                  linear-gradient(0deg, rgba(0,83,226,0.8) 25.36%, rgba(0,83,226,0) 56.35%);
+    }
+
+    .picks-card-gradient-navy {
+      background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.4) 100%),
+                  linear-gradient(0deg, rgba(0,61,121,0.8) 25.36%, rgba(0,61,121,0) 56.35%);
+    }
+
+    .merchant-circle {
+      position: absolute;
+      left: 10px;
+      top: 10px;
+      width: 64px;
+      height: 64px;
+      background: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .merchant-circle img {
+      width: 50px;
+      height: 50px;
+      object-fit: contain;
+    }
+
+    .picks-card-title {
+      position: absolute;
+      left: 16px;
+      bottom: 12px;
+      width: 268px;
+      font-size: 24px;
+      font-weight: 800;
+      line-height: 38px;
+      color: white;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .boosted-tag {
+      position: absolute;
+      right: 8px;
+      top: 8px;
+      background: rgba(0,0,0,0.5);
+      border-radius: 8px;
+      padding: 3px 4px;
+      display: flex;
+      align-items: center;
+      gap: 2px;
+    }
+    .boosted-tag img { width: 16px; height: 16px; }
+    .boosted-label {
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 16px;
+      color: white;
+      padding: 0 4px;
+      white-space: nowrap;
+    }
+
+    /* ── Offer cards ── */
+    /* Extra bottom padding so the fav button (20px overhang) is visible */
+    .h-scroll.offers {
+      padding-bottom: 24px;
+    }
+
+    .offer-card {
+      width: 150.8px;
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+      position: relative;   /* anchor for absolute fav-btn */
+    }
+
+    /* Image container: overflow:hidden for rounded corners on the images */
+    .offer-card-image {
+      width: 100%;
+      height: 121px;
+      border-radius: 12px;
+      position: relative;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .offer-card-image img.offer-bg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 12px;
+    }
+
+    /* Fav button lives on .offer-card, NOT inside .offer-card-image */
+    .offer-fav-btn {
+      position: absolute;
+      top: 101px;   /* 121px image - 20px (half btn) = 101px from card top */
+      left: 50%;
+      transform: translateX(-50%);
+      width: 40px;
+      height: 40px;
+      background: white;
+      border: 1px solid #e9e9e9;
+      border-radius: 57.143px;
+      box-shadow: 0px 6.667px 13.333px 0px rgba(65,11,24,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 3;
+    }
+    .offer-fav-btn img { width: 24px; height: 24px; }
+
+    /* Text sits below the fav button (121 - 20 + 40 = 141 → leave 28px gap) */
+    .offer-card-content {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      margin-top: 28px;
+    }
+
+    .offer-brand {
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 16px;
+      color: #5a5858;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .offer-title {
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 20px;
+      color: black;
+    }
+
+    /* Hoka special: blue bg + circular logo (image keeps overflow:hidden for bg clip) */
+    .offer-card-image.hoka {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hoka-bg {
+      position: absolute;
+      inset: 0;
+      background: #0183c1;
+      border-radius: 12px;
+    }
+
+    .hoka-logo-circle {
+      background: white;
+      border-radius: 44.5px;
+      width: 89px;
+      height: 89px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      z-index: 1;
+      flex-shrink: 0;
+    }
+    .hoka-logo-circle img { width: 79px; height: 79px; object-fit: contain; }
+
+    /* ══ NAV FOOTER ══ */
+    /* Only the browser bar contributes to flex height — scroll content runs to y=880 */
+    .nav-footer {
+      flex-shrink: 0;
+      position: relative;
+      height: 52px;
+      z-index: 10;
+    }
+
+    /* SVG floats absolutely above the browser bar.
+       bottom:-42px: SVG bottom extends 42px below nav-footer (transparent shadow buffer,
+       clipped by phone-frame overflow:hidden). Pill lands 8px above browser bar top. */
+    .bottom-nav-svg {
+      display: block;
+      width: 511px;
+      position: absolute;
+      left: -40.5px;
+      bottom: -42px;
+      pointer-events: none;
+    }
+
+    /* ── Bottom browser bar ── */
+    .browser-bar {
+      width: 430px;
+      height: 52px;
+      background: rgba(249,249,249,0.94);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      box-shadow: inset 0px 0.33px 0px 0px rgba(0,0,0,0.3);
+      position: relative;
+    }
+
+    .browser-bar-domain {
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 3px;
+    }
+    .browser-bar-domain img { width: 6.226px; height: 9.058px; }
+
+    .browser-bar-url {
+      font-family: 'SF Pro Display', sans-serif;
+      font-size: 12.66px;
+      line-height: normal;
+      color: black;
+      letter-spacing: 0.1266px;
+      white-space: nowrap;
+    }
+
+    .browser-bar-indicator {
+      position: absolute;
+      bottom: 7px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 139px;
+      height: 5px;
+      background: black;
+      border-radius: 2.5px;
+    }
+  </style>
+</head>
+<body>
+<div class="phone-frame">
+
+  <!-- ══════════════════ SCROLLABLE CONTENT ══════════════════ -->
+  <div class="scroll-area">
+
+    <!-- ── Dark header (384 px) ── -->
+    <div class="dark-header">
+
+      <!-- TruWest Credit Union logo -->
+      <div class="logo-wrap">
+        <img src="-assets/TruWest%20Logo.png" alt="TruWest Credit Union" style="height:62px;width:auto;" />
+      </div>
+
+      <!-- Points card -->
+      <div class="points-card">
+        <div class="points-top-row">
+          <div>
+            <p class="points-label">Available points</p>
+            <div class="points-value-row">
+              <img style="width:20px;height:20px;flex-shrink:0;" src="-assets/toll.svg" alt="" />
+              <span class="points-big">15,000 points</span>
+            </div>
+          </div>
+          <a class="how-it-works-btn" href="amplifi-points.html" style="text-decoration:none;">How it works</a>
+        </div>
+        <div class="points-bottom-row">
+          <div>
+            <p class="points-stat-label">This week</p>
+            <div class="points-stat-value"><span class="points-big">+840</span></div>
+          </div>
+          <div>
+            <p class="points-stat-label">Cash equiv.</p>
+            <div class="points-stat-value"><span class="points-big">$150</span></div>
+          </div>
+          <div>
+            <p class="points-stat-label">Potential value</p>
+            <div class="points-stat-value">
+              <img style="width:20px;height:20px;flex-shrink:0;" src="https://www.figma.com/api/mcp/asset/df5753c7-d408-451d-bd29-3d73e232cb50" alt="" />
+              <span class="points-big">$165</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Concierge strip (dark rounded panel at bottom of header) -->
+      <div class="concierge-strip"></div>
+
+      <!-- Concierge banner (sits on top of strip) — links to concierge page -->
+      <a class="concierge-banner" href="amplifi-concierge.html">
+        <div class="concierge-icon-wrap">
+          <img src="https://www.figma.com/api/mcp/asset/181b7590-549d-4b58-b214-f65e7631b172" alt="sparkle" />
+        </div>
+        <div class="concierge-text">
+          <p class="concierge-title">Rewards concierge</p>
+          <p class="concierge-subtitle">Make the most of your points</p>
+        </div>
+        <img class="concierge-arrow" src="https://www.figma.com/api/mcp/asset/522a9131-525a-4a35-8a12-8d7558035ead" alt="→" />
+      </a>
+
+    </div><!-- /dark-header -->
+
+    <!-- ── White card (grows with content) ── -->
+    <div class="white-card">
+
+      <!-- Browse rewards -->
+      <p class="section-title">Browse rewards</p>
+      <div class="category-grid">
+
+        <!-- Cabin vacations -->
+        <div class="category-card">
+          <div class="category-icon-wrap">
+            <img src="-assets/cabin-vacas.png" alt="Cabin vacations" style="width:34px;height:34px;object-fit:contain;" />
+          </div>
+          <p class="category-label">Cabin<br>vacations</p>
+        </div>
+
+        <!-- Local coffee -->
+        <div class="category-card">
+          <div class="category-icon-wrap">
+            <img src="-assets/local-coffee.png" alt="Local coffee" style="width:34px;height:34px;object-fit:contain;" />
+          </div>
+          <p class="category-label">Local<br>coffee</p>
+        </div>
+
+        <!-- Party planning -->
+        <div class="category-card">
+          <div class="category-icon-wrap">
+            <img src="-assets/party-planning.png" alt="Party planning" style="width:34px;height:34px;object-fit:contain;" />
+          </div>
+          <p class="category-label">Party<br>planning</p>
+        </div>
+
+        <!-- Running gear -->
+        <div class="category-card">
+          <div class="category-icon-wrap">
+            <img src="-assets/running-gear.png" alt="Running gear" style="width:34px;height:34px;object-fit:contain;" />
+          </div>
+          <p class="category-label">Running<br>gear</p>
+        </div>
+
+      </div>
+
+      <!-- Top picks for you -->
+      <div class="section-group">
+        <p class="section-title">Top picks for you</p>
+        <div class="h-scroll">
+          <div class="picks-card">
+            <img class="picks-card-bg" src="https://www.figma.com/api/mcp/asset/3d69169a-b4dd-453e-b441-0e9b91fed197" alt="" />
+            <img style="position:absolute;left:-5px;top:-100px;width:311px;height:311px;object-fit:cover;" src="https://www.figma.com/api/mcp/asset/1aeeb842-b34b-484f-9fb2-1e877a9d713d" alt="" />
+            <div class="picks-card-overlay picks-card-gradient-blue"></div>
+            <div class="merchant-circle">
+              <img src="-assets/walmart-logo.png" alt="Walmart" />
+            </div>
+            <p class="picks-card-title">+10% Gift Cards</p>
+            <div class="boosted-tag">
+              <img src="https://www.figma.com/api/mcp/asset/b59ff884-8866-4c7f-93fb-fe537864012b" alt="" />
+              <span class="boosted-label">Boosted</span>
+            </div>
+          </div>
+          <div class="picks-card">
+            <img class="picks-card-bg" src="https://www.figma.com/api/mcp/asset/3d69169a-b4dd-453e-b441-0e9b91fed197" alt="" />
+            <img style="position:absolute;left:-5px;top:-100px;width:311px;height:311px;object-fit:cover;" src="https://www.figma.com/api/mcp/asset/ebde0707-fb5b-43f8-b3aa-82334d3d36ca" alt="" />
+            <div class="picks-card-overlay picks-card-gradient-navy"></div>
+            <div class="merchant-circle">
+              <img src="https://www.figma.com/api/mcp/asset/db05cc57-2b97-4e14-9afc-348139483987" alt="Delta" style="width:58px;height:58px;" />
+            </div>
+            <p class="picks-card-title">Seat Upgrade</p>
+            <div class="boosted-tag">
+              <img src="https://www.figma.com/api/mcp/asset/b59ff884-8866-4c7f-93fb-fe537864012b" alt="" />
+              <span class="boosted-label">Boosted</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Based on your recent activity -->
+      <div class="section-group">
+        <p class="section-title">Based on your recent activity</p>
+        <div class="h-scroll offers">
+
+          <!-- On Running -->
+          <div class="offer-card">
+            <div class="offer-card-image">
+              <img class="offer-bg" src="https://www.figma.com/api/mcp/asset/9cb65e73-024e-45c5-98ca-818055bcb377" alt="" />
+              <img style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" src="https://www.figma.com/api/mcp/asset/f92ff9fd-5d06-4663-8769-e861bdfd2cf6" alt="" />
+            </div>
+            <div class="offer-fav-btn"><img src="https://www.figma.com/api/mcp/asset/c1345d59-5305-4cd3-82a2-c1e86ef574a6" alt="♡" /></div>
+            <div class="offer-card-content">
+              <p class="offer-brand">On Running</p>
+              <p class="offer-title">15% Off Cloud Series Shoes</p>
+            </div>
+          </div>
+
+          <!-- Beats -->
+          <div class="offer-card">
+            <div class="offer-card-image">
+              <img class="offer-bg" src="https://www.figma.com/api/mcp/asset/ae3a3dfc-810e-4966-8827-27387674b1b7" alt="" />
+              <img style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" src="https://www.figma.com/api/mcp/asset/aa220ec9-c426-4ea9-a156-52670c345ff1" alt="" />
+              <img style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" src="https://www.figma.com/api/mcp/asset/24fd4c6b-4867-46b6-9733-ae79974a4c34" alt="" />
+            </div>
+            <div class="offer-fav-btn"><img src="https://www.figma.com/api/mcp/asset/c1345d59-5305-4cd3-82a2-c1e86ef574a6" alt="♡" /></div>
+            <div class="offer-card-content">
+              <p class="offer-brand">Beats</p>
+              <p class="offer-title">$40 Off Beats Studio Headphones</p>
+            </div>
+          </div>
+
+          <!-- Best Buy -->
+          <div class="offer-card">
+            <div class="offer-card-image">
+              <img class="offer-bg" src="https://www.figma.com/api/mcp/asset/241f6631-a948-4357-abc3-6d7d0877ed95" alt="" />
+              <img style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" src="https://www.figma.com/api/mcp/asset/1d3875ff-3173-4862-af87-83cacdc34dbd" alt="" />
+              <div style="position:absolute;inset:0;background:white;border-radius:12px;opacity:0.5;"></div>
+              <img style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" src="https://www.figma.com/api/mcp/asset/37901294-d607-42d1-a0df-58c83affd095" alt="" />
+            </div>
+            <div class="offer-fav-btn"><img src="https://www.figma.com/api/mcp/asset/c1345d59-5305-4cd3-82a2-c1e86ef574a6" alt="♡" /></div>
+            <div class="offer-card-content">
+              <p class="offer-brand">Best Buy</p>
+              <p class="offer-title">20% Off Any Samsung UHD TV</p>
+            </div>
+          </div>
+
+          <!-- Hoka -->
+          <div class="offer-card">
+            <div class="offer-card-image hoka">
+              <img style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" src="https://www.figma.com/api/mcp/asset/962211d1-f9c5-4aa8-8782-7a89f5a5ed56" alt="" />
+              <div class="hoka-bg"></div>
+              <div class="hoka-logo-circle"><img src="https://www.figma.com/api/mcp/asset/d1ea0cca-e0d6-4441-8570-07c33bfe385f" alt="Hoka" /></div>
+            </div>
+            <div class="offer-fav-btn"><img src="https://www.figma.com/api/mcp/asset/c1345d59-5305-4cd3-82a2-c1e86ef574a6" alt="♡" /></div>
+            <div class="offer-card-content">
+              <p class="offer-brand">Hoka One One</p>
+              <p class="offer-title">$40 Off Clifton 9 Running Shoes</p>
+            </div>
+          </div>
+
+          <!-- Lululemon -->
+          <div class="offer-card">
+            <div class="offer-card-image">
+              <img class="offer-bg" src="https://www.figma.com/api/mcp/asset/5c9d0e52-7955-4dde-94e5-11a4f6bf26cc" alt="" />
+            </div>
+            <div class="offer-fav-btn"><img src="https://www.figma.com/api/mcp/asset/c1345d59-5305-4cd3-82a2-c1e86ef574a6" alt="♡" /></div>
+            <div class="offer-card-content">
+              <p class="offer-brand">Lululemon</p>
+              <p class="offer-title">10% Off Men's Training Gear</p>
+            </div>
+          </div>
+
+        </div>
+      </div><!-- /recent activity -->
+
+      <!-- Trending deals -->
+      <div class="section-group">
+        <p class="section-title">Trending deals</p>
+        <div class="h-scroll offers">
+
+          <!-- Lululemon -->
+          <div class="offer-card">
+            <div class="offer-card-image">
+              <img class="offer-bg" src="https://www.figma.com/api/mcp/asset/5c9d0e52-7955-4dde-94e5-11a4f6bf26cc" alt="" />
+            </div>
+            <div class="offer-fav-btn"><img src="https://www.figma.com/api/mcp/asset/c1345d59-5305-4cd3-82a2-c1e86ef574a6" alt="♡" /></div>
+            <div class="offer-card-content">
+              <p class="offer-brand">Lululemon</p>
+              <p class="offer-title">10% Off Women's Yoga Gear</p>
+            </div>
+          </div>
+
+          <!-- Hoka -->
+          <div class="offer-card">
+            <div class="offer-card-image hoka">
+              <img style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" src="https://www.figma.com/api/mcp/asset/962211d1-f9c5-4aa8-8782-7a89f5a5ed56" alt="" />
+              <div class="hoka-bg"></div>
+              <div class="hoka-logo-circle"><img src="https://www.figma.com/api/mcp/asset/d1ea0cca-e0d6-4441-8570-07c33bfe385f" alt="Hoka" /></div>
+            </div>
+            <div class="offer-fav-btn"><img src="https://www.figma.com/api/mcp/asset/c1345d59-5305-4cd3-82a2-c1e86ef574a6" alt="♡" /></div>
+            <div class="offer-card-content">
+              <p class="offer-brand">Hoka One One</p>
+              <p class="offer-title">Free Shipping on All Orders</p>
+            </div>
+          </div>
+
+          <!-- On Running -->
+          <div class="offer-card">
+            <div class="offer-card-image">
+              <img class="offer-bg" src="https://www.figma.com/api/mcp/asset/9cb65e73-024e-45c5-98ca-818055bcb377" alt="" />
+              <img style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" src="https://www.figma.com/api/mcp/asset/f92ff9fd-5d06-4663-8769-e861bdfd2cf6" alt="" />
+            </div>
+            <div class="offer-fav-btn"><img src="https://www.figma.com/api/mcp/asset/c1345d59-5305-4cd3-82a2-c1e86ef574a6" alt="♡" /></div>
+            <div class="offer-card-content">
+              <p class="offer-brand">On Running</p>
+              <p class="offer-title">20% Off New Arrivals</p>
+            </div>
+          </div>
+
+          <!-- Best Buy -->
+          <div class="offer-card">
+            <div class="offer-card-image">
+              <img class="offer-bg" src="https://www.figma.com/api/mcp/asset/241f6631-a948-4357-abc3-6d7d0877ed95" alt="" />
+              <img style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" src="https://www.figma.com/api/mcp/asset/1d3875ff-3173-4862-af87-83cacdc34dbd" alt="" />
+              <div style="position:absolute;inset:0;background:white;opacity:0.5;"></div>
+              <img style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" src="https://www.figma.com/api/mcp/asset/37901294-d607-42d1-a0df-58c83affd095" alt="" />
+            </div>
+            <div class="offer-fav-btn"><img src="https://www.figma.com/api/mcp/asset/c1345d59-5305-4cd3-82a2-c1e86ef574a6" alt="♡" /></div>
+            <div class="offer-card-content">
+              <p class="offer-brand">Best Buy</p>
+              <p class="offer-title">$100 Off Apple MacBook Air</p>
+            </div>
+          </div>
+
+          <!-- Beats -->
+          <div class="offer-card">
+            <div class="offer-card-image">
+              <img class="offer-bg" src="https://www.figma.com/api/mcp/asset/ae3a3dfc-810e-4966-8827-27387674b1b7" alt="" />
+              <img style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" src="https://www.figma.com/api/mcp/asset/aa220ec9-c426-4ea9-a156-52670c345ff1" alt="" />
+              <img style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" src="https://www.figma.com/api/mcp/asset/24fd4c6b-4867-46b6-9733-ae79974a4c34" alt="" />
+            </div>
+            <div class="offer-fav-btn"><img src="https://www.figma.com/api/mcp/asset/c1345d59-5305-4cd3-82a2-c1e86ef574a6" alt="♡" /></div>
+            <div class="offer-card-content">
+              <p class="offer-brand">Beats</p>
+              <p class="offer-title">$20 Off Beats Flex Earphones</p>
+            </div>
+          </div>
+
+        </div>
+      </div><!-- /trending deals -->
+
+      <!-- Popular this week -->
+      <div class="section-group">
+        <p class="section-title">Popular this week</p>
+        <div class="h-scroll offers">
+
+          <!-- Best Buy -->
+          <div class="offer-card">
+            <div class="offer-card-image">
+              <img class="offer-bg" src="https://www.figma.com/api/mcp/asset/241f6631-a948-4357-abc3-6d7d0877ed95" alt="" />
+              <img style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" src="https://www.figma.com/api/mcp/asset/1d3875ff-3173-4862-af87-83cacdc34dbd" alt="" />
+              <div style="position:absolute;inset:0;background:white;opacity:0.5;"></div>
+              <img style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" src="https://www.figma.com/api/mcp/asset/37901294-d607-42d1-a0df-58c83affd095" alt="" />
+            </div>
+            <div class="offer-fav-btn"><img src="https://www.figma.com/api/mcp/asset/c1345d59-5305-4cd3-82a2-c1e86ef574a6" alt="♡" /></div>
+            <div class="offer-card-content">
+              <p class="offer-brand">Best Buy</p>
+              <p class="offer-title">15% Off Smart Home Devices</p>
+            </div>
+          </div>
+
+          <!-- On Running -->
+          <div class="offer-card">
+            <div class="offer-card-image">
+              <img class="offer-bg" src="https://www.figma.com/api/mcp/asset/9cb65e73-024e-45c5-98ca-818055bcb377" alt="" />
+              <img style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" src="https://www.figma.com/api/mcp/asset/f92ff9fd-5d06-4663-8769-e861bdfd2cf6" alt="" />
+            </div>
+            <div class="offer-fav-btn"><img src="https://www.figma.com/api/mcp/asset/c1345d59-5305-4cd3-82a2-c1e86ef574a6" alt="♡" /></div>
+            <div class="offer-card-content">
+              <p class="offer-brand">On Running</p>
+              <p class="offer-title">Buy 2 Get 1 Free Accessories</p>
+            </div>
+          </div>
+
+          <!-- Beats -->
+          <div class="offer-card">
+            <div class="offer-card-image">
+              <img class="offer-bg" src="https://www.figma.com/api/mcp/asset/ae3a3dfc-810e-4966-8827-27387674b1b7" alt="" />
+              <img style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" src="https://www.figma.com/api/mcp/asset/aa220ec9-c426-4ea9-a156-52670c345ff1" alt="" />
+            </div>
+            <div class="offer-fav-btn"><img src="https://www.figma.com/api/mcp/asset/c1345d59-5305-4cd3-82a2-c1e86ef574a6" alt="♡" /></div>
+            <div class="offer-card-content">
+              <p class="offer-brand">Beats</p>
+              <p class="offer-title">Free Case with Headphone Purchase</p>
+            </div>
+          </div>
+
+          <!-- Hoka -->
+          <div class="offer-card">
+            <div class="offer-card-image hoka">
+              <img style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" src="https://www.figma.com/api/mcp/asset/962211d1-f9c5-4aa8-8782-7a89f5a5ed56" alt="" />
+              <div class="hoka-bg"></div>
+              <div class="hoka-logo-circle"><img src="https://www.figma.com/api/mcp/asset/d1ea0cca-e0d6-4441-8570-07c33bfe385f" alt="Hoka" /></div>
+            </div>
+            <div class="offer-fav-btn"><img src="https://www.figma.com/api/mcp/asset/c1345d59-5305-4cd3-82a2-c1e86ef574a6" alt="♡" /></div>
+            <div class="offer-card-content">
+              <p class="offer-brand">Hoka One One</p>
+              <p class="offer-title">$60 Off Speedgoat 5 Trail Shoes</p>
+            </div>
+          </div>
+
+          <!-- Lululemon -->
+          <div class="offer-card">
+            <div class="offer-card-image">
+              <img class="offer-bg" src="https://www.figma.com/api/mcp/asset/5c9d0e52-7955-4dde-94e5-11a4f6bf26cc" alt="" />
+            </div>
+            <div class="offer-fav-btn"><img src="https://www.figma.com/api/mcp/asset/c1345d59-5305-4cd3-82a2-c1e86ef574a6" alt="♡" /></div>
+            <div class="offer-card-content">
+              <p class="offer-brand">Lululemon</p>
+              <p class="offer-title">25% Off Accessories & Bags</p>
+            </div>
+          </div>
+
+        </div>
+      </div><!-- /popular this week -->
+
+    </div><!-- /white-card -->
+
+  </div><!-- /scroll-area -->
+
+  <!-- ══════════════════ FIXED NAV FOOTER ══════════════════ -->
+  <div class="nav-footer">
+    <img src="-assets/bottom-nav.svg" class="bottom-nav-svg" alt="" />
+    <!-- Transparent click overlays for SVG nav icons -->
+    <!-- Sparkle/Concierge: SVG x≈314–373 → viewport x=273–332, y=815–872 -->
+    <a href="amplifi-concierge.html"
+       style="position:absolute; left:273px; top:-70px; width:59px; height:62px; z-index:20; cursor:pointer;"
+       aria-label="Concierge"></a>
+    <div class="browser-bar">
+      <div class="browser-bar-domain">
+        <img src="https://www.figma.com/api/mcp/asset/f56d8b7a-5a60-4782-9629-3adadaa6b4de" alt="🔒" />
+        <span class="browser-bar-url">url.com</span>
+      </div>
+      <div class="browser-bar-indicator"></div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

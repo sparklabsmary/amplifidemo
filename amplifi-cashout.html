@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=430, initial-scale=1.0" />
+  <title>AmpliFi – Convert Points to Cash</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500&family=Onest:wght@600&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      width: 430px;
+      height: 932px;
+      overflow: hidden;
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* ══ PHONE FRAME ══ */
+    .phone-frame {
+      width: 430px;
+      height: 932px;
+      background: linear-gradient(248.5deg, #474748 4.28%, #191919 73.04%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* ══ WHITE CARD ══ */
+    .white-card {
+      position: absolute;
+      top: 56px;
+      left: 0;
+      width: 430px;
+      height: 876px;
+      background: #fff;
+      border-radius: 32px 32px 0 0;
+      overflow: hidden;
+    }
+
+    /* ── Top bar ── */
+    .top-bar {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      width: 398px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .pill-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 12px;
+      border-radius: 1000px;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .close-btn { background: #f4f4f5; }
+    .close-btn img { width: 16px; height: 16px; display: block; }
+    .right-pill { background: white; border: 1px solid #f0f0f0; }
+    .right-pill img { width: 16px; height: 16px; display: block; }
+
+    .page-title {
+      font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 18px;
+      font-weight: 600;
+      color: #37394a;
+      white-space: nowrap;
+    }
+
+    /* ── Amount section (centered, top:107 in white card) ── */
+    .amount-section {
+      position: absolute;
+      top: 107px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .amount-display-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 327px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #eceff3;
+      height: 69px;
+      position: relative;
+    }
+
+    .amount-display {
+      font-family: 'Inter', sans-serif;
+      font-size: 49px;
+      font-weight: 400;
+      color: #000;
+      line-height: 1.4;
+      white-space: nowrap;
+    }
+
+    .cursor-blink {
+      display: inline-block;
+      width: 2px;
+      height: 52px;
+      background: #000;
+      margin-left: 3px;
+      vertical-align: middle;
+      animation: blink 1s step-end infinite;
+      border-radius: 1px;
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    .amount-note {
+      font-family: 'Inter', sans-serif;
+      font-style: italic;
+      font-size: 12px;
+      font-weight: 400;
+      color: rgba(102, 109, 128, 0.5);
+      text-align: center;
+      white-space: nowrap;
+      line-height: 16px;
+    }
+
+    /* ── Amount pills ── */
+    .amount-pills {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .amount-pill {
+      background: #f4f4f5;
+      border: none;
+      border-radius: 100px;
+      padding: 8px 24px;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: #666d80;
+      cursor: pointer;
+      white-space: nowrap;
+      line-height: 1.55;
+      transition: all 0.15s ease;
+    }
+    .amount-pill.active {
+      background: #e4f0f8;
+      border: 1px solid #2a7caa;
+      color: #2a7caa;
+    }
+
+    /* ── Account section (top:281 in white card) ── */
+    .account-section {
+      position: absolute;
+      top: 281px;
+      left: 16px;
+      width: 398px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .account-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 8px 20px;
+      border: 1px solid #eceff3;
+      border-radius: 24px;
+      width: 100%;
+    }
+
+    .account-logo img {
+      height: 28.845px;
+      width: 75.989px;
+      display: block;
+      object-fit: contain;
+    }
+
+    .account-info {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+    .account-name {
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: #0d0d12;
+      line-height: 1.55;
+    }
+    .account-number {
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 400;
+      color: #666d80;
+      line-height: 1.55;
+    }
+
+    .points-remaining {
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      color: #666d80;
+      line-height: 1.55;
+      text-align: center;
+    }
+    .points-remaining strong {
+      font-weight: 700;
+      color: #2a7caa;
+    }
+
+    /* ── Concierge nudge banner (top:401 in white card) ── */
+    .concierge-nudge {
+      position: absolute;
+      top: 401px;
+      left: 16px;
+      width: 398px;
+      background: rgba(97, 167, 212, 0.3);
+      border-radius: 20px 16px 20px 16px;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nudge-content {
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+      flex: 1;
+    }
+
+    .nudge-icon {
+      background: #2a7caa;
+      border-radius: 17.857px;
+      padding: 5.952px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: inset 0px -2.381px 2.976px 0px rgba(255,255,255,0.65);
+    }
+    .nudge-icon img { width: 13.095px; height: 13.095px; display: block; }
+
+    .nudge-text { flex: 1; }
+    .nudge-title {
+      font-family: 'Onest', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: #0e121b;
+      line-height: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .nudge-body {
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      font-weight: 400;
+      color: rgba(0,0,0,0.8);
+      line-height: 16px;
+      margin-top: 1px;
+    }
+
+    .nudge-img-wrap {
+      position: relative;
+      flex-shrink: 0;
+      width: 66px;
+      height: 42.061px;
+    }
+    .nudge-img-wrap img {
+      width: 66px;
+      height: 42.061px;
+      border-radius: 5px;
+      object-fit: cover;
+      display: block;
+    }
+    .nudge-badge {
+      position: absolute;
+      top: -4px;
+      right: -4px;
+      background: #c1dd97;
+      color: #3b6d11;
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      font-weight: 500;
+      padding: 3px 6px;
+      border-radius: 100px;
+      white-space: nowrap;
+      line-height: 1.3;
+    }
+
+    /* ══ CONTINUE BUTTON (in phone frame, not white card) ══ */
+    .continue-btn {
+      position: absolute;
+      top: 541px; /* direct child of phone-frame, matches Figma top:541 */
+      left: 16px;
+      width: 398px;
+      height: 54px;
+      background: #3b3b3b;
+      border: none;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 25;
+      transition: background 0.15s ease, opacity 0.15s ease;
+    }
+    .continue-btn:active { opacity: 0.85; }
+    .continue-btn.disabled {
+      background: #b0b0b0;
+      cursor: default;
+    }
+    .continue-btn span {
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      font-weight: 800;
+      color: #fff;
+      line-height: 22px;
+    }
+
+    /* ══ NUMPAD (in phone frame, overlaid at bottom) ══ */
+    .numpad {
+      position: absolute;
+      top: 612px; /* 65.67% × 932 */
+      left: 0;
+      width: 430px;
+      height: 320px;
+      z-index: 20;
+    }
+
+    .numpad-bg {
+      position: absolute;
+      inset: 0;
+      background: rgba(209, 210, 215, 0.92);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-radius: 28.88px 28.88px 0 0;
+      border-top: 0.18px solid rgba(0,0,0,0.09);
+      box-shadow: 0 0 1px rgba(0,0,0,0.1), 0 0 0 0.5px rgba(255,255,255,0.5);
+    }
+
+    .numpad-grid {
+      position: absolute;
+      top: 8px;
+      left: 6px;
+      right: 6px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(4, 54px);
+      gap: 7px;
+    }
+
+    .key {
+      background: rgba(255,255,255,0.88);
+      border-radius: 9px;
+      box-shadow: 0 1px 0.5px rgba(0,0,0,0.18);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      user-select: none;
+      -webkit-user-select: none;
+      transition: opacity 0.08s ease;
+      gap: 0;
+      padding-bottom: 4px;
+    }
+    .key:active { opacity: 0.55; }
+
+    .key.special {
+      background: rgba(172,177,184,0.55);
+      box-shadow: none;
+    }
+    .key.empty {
+      background: rgba(172,177,184,0.55);
+      box-shadow: none;
+      cursor: default;
+    }
+
+    .key-num {
+      font-family: -apple-system, 'SF Pro Display', sans-serif;
+      font-size: 25px;
+      font-weight: 300;
+      color: rgba(0,0,0,0.65);
+      line-height: 1.1;
+    }
+    .key-letters {
+      font-family: -apple-system, 'SF Pro Display', sans-serif;
+      font-size: 9px;
+      font-weight: 500;
+      color: rgba(0,0,0,0.65);
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      line-height: 1;
+    }
+    .key-backspace {
+      font-size: 22px;
+      color: rgba(0,0,0,0.65);
+      line-height: 1;
+    }
+
+    /* ── Browser bar ── */
+    .browser-bar {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 430px;
+      height: 52px;
+      background: rgba(249, 249, 249, 0.94);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      box-shadow: inset 0px 0.33px 0px 0px rgba(0,0,0,0.3);
+      z-index: 40;
+    }
+    .browser-bar-domain {
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 3px;
+    }
+    .browser-bar-domain img { width: 6.226px; height: 9.058px; }
+    .browser-bar-url {
+      font-family: 'SF Pro Display', -apple-system, sans-serif;
+      font-size: 12.66px;
+      color: #000;
+      letter-spacing: 0.1266px;
+      white-space: nowrap;
+    }
+    .browser-bar-indicator {
+      position: absolute;
+      bottom: 7px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 139px;
+      height: 5px;
+      background: #000;
+      border-radius: 2.5px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="phone-frame">
+
+  <!-- ══ WHITE CARD ══ -->
+  <div class="white-card">
+
+    <!-- Top bar -->
+    <div class="top-bar">
+      <a class="pill-btn close-btn" href="amplifi-points.html" aria-label="Back">
+        <img src="https://www.figma.com/api/mcp/asset/85638aa8-417a-40f6-93aa-d567dc0d0d2e" alt="close" />
+      </a>
+      <span class="page-title">Convert points to cash</span>
+      <div class="pill-btn right-pill">
+        <img src="https://www.figma.com/api/mcp/asset/b1d05f5b-04bf-4df7-a5bc-527f043317fe" alt="" />
+      </div>
+    </div>
+
+    <!-- Amount section -->
+    <div class="amount-section">
+      <div class="amount-display-row">
+        <span class="amount-display" id="amountDisplay">$<span id="amountValue">50</span></span>
+        <span class="cursor-blink"></span>
+      </div>
+      <p class="amount-note">The minimum transfer amount is $5, maximum is $150</p>
+      <div class="amount-pills">
+        <button class="amount-pill" onclick="setAmount(10)" id="pill10">$10</button>
+        <button class="amount-pill active" onclick="setAmount(50)" id="pill50">$50</button>
+        <button class="amount-pill" onclick="setAmount(100)" id="pill100">$100</button>
+        <button class="amount-pill" onclick="setAmount(150)" id="pill150">$150</button>
+      </div>
+    </div>
+
+    <!-- Account section -->
+    <div class="account-section">
+      <div class="account-row">
+        <div class="account-logo">
+          <img src="-assets/TruWest%20Logo.png" alt="TruWest Credit Union" />
+        </div>
+        <div class="account-info">
+          <span class="account-name">Checking Account</span>
+          <span class="account-number">**** **** **** 1234</span>
+        </div>
+      </div>
+      <p class="points-remaining">You will have <strong id="pointsRemaining">10,000</strong> points remaining.</p>
+    </div>
+
+    <!-- Concierge nudge -->
+    <div class="concierge-nudge">
+      <div class="nudge-content">
+        <div class="nudge-icon">
+          <img src="https://www.figma.com/api/mcp/asset/0dc091b7-f2b9-49f2-a6e4-1fda755e40c2" alt="" />
+        </div>
+        <div class="nudge-text">
+          <p class="nudge-title">Rewards concierge</p>
+          <p class="nudge-body">Don't you want to gain an extra $15 by redeeming for a Walmart gift card instead?</p>
+        </div>
+      </div>
+      <div class="nudge-img-wrap">
+        <img src="https://www.figma.com/api/mcp/asset/1ee1cc75-b680-4a93-92a9-431f2e02f384" alt="Walmart" />
+        <span class="nudge-badge">+10%</span>
+      </div>
+    </div>
+
+  </div><!-- /white-card -->
+
+  <!-- ══ CONTINUE BUTTON (floats above numpad) ══ -->
+  <button class="continue-btn" id="continueBtn" onclick="handleContinue()">
+    <span>Continue</span>
+  </button>
+
+  <!-- ══ NUMPAD ══ -->
+  <div class="numpad">
+    <div class="numpad-bg"></div>
+    <div class="numpad-grid">
+      <!-- Row 1 -->
+      <div class="key" onclick="keyPress('1')"><span class="key-num">1</span></div>
+      <div class="key" onclick="keyPress('2')"><span class="key-num">2</span><span class="key-letters">ABC</span></div>
+      <div class="key" onclick="keyPress('3')"><span class="key-num">3</span><span class="key-letters">DEF</span></div>
+      <!-- Row 2 -->
+      <div class="key" onclick="keyPress('4')"><span class="key-num">4</span><span class="key-letters">GHI</span></div>
+      <div class="key" onclick="keyPress('5')"><span class="key-num">5</span><span class="key-letters">JKL</span></div>
+      <div class="key" onclick="keyPress('6')"><span class="key-num">6</span><span class="key-letters">MNO</span></div>
+      <!-- Row 3 -->
+      <div class="key" onclick="keyPress('7')"><span class="key-num">7</span><span class="key-letters">PQRS</span></div>
+      <div class="key" onclick="keyPress('8')"><span class="key-num">8</span><span class="key-letters">TUV</span></div>
+      <div class="key" onclick="keyPress('9')"><span class="key-num">9</span><span class="key-letters">WXYZ</span></div>
+      <!-- Row 4 -->
+      <div class="key empty"></div>
+      <div class="key" onclick="keyPress('0')"><span class="key-num">0</span></div>
+      <div class="key special" onclick="keyPress('back')"><span class="key-backspace">⌫</span></div>
+    </div>
+  </div>
+
+  <!-- ══ BROWSER BAR ══ -->
+  <div class="browser-bar">
+    <div class="browser-bar-domain">
+      <img src="https://www.figma.com/api/mcp/asset/9a8957ac-1660-4b35-aa0b-c4fb0a91c553" alt="" />
+      <span class="browser-bar-url">url.com</span>
+    </div>
+    <div class="browser-bar-indicator"></div>
+  </div>
+
+</div><!-- /phone-frame -->
+
+<script>
+  const TOTAL_POINTS = 15000;
+  const POINTS_PER_DOLLAR = 100;
+  const MIN = 5;
+  const MAX = 150;
+
+  let amountStr = '50';
+
+  const amountValueEl   = document.getElementById('amountValue');
+  const pointsRemainingEl = document.getElementById('pointsRemaining');
+  const continueBtn     = document.getElementById('continueBtn');
+  const pills           = ['pill10','pill50','pill100','pill150'];
+  const pillAmounts     = { pill10: 10, pill50: 50, pill100: 100, pill150: 150 };
+
+  function render() {
+    const num = parseInt(amountStr, 10) || 0;
+    amountValueEl.textContent = amountStr || '0';
+
+    const pointsUsed = num * POINTS_PER_DOLLAR;
+    const remaining  = Math.max(0, TOTAL_POINTS - pointsUsed);
+    pointsRemainingEl.textContent = remaining.toLocaleString();
+
+    // Pill highlight
+    pills.forEach(id => {
+      const btn = document.getElementById(id);
+      btn.classList.toggle('active', pillAmounts[id] === num);
+    });
+
+    // Continue button state
+    const valid = num >= MIN && num <= MAX;
+    continueBtn.classList.toggle('disabled', !valid);
+  }
+
+  function setAmount(val) {
+    amountStr = String(val);
+    render();
+  }
+
+  function keyPress(key) {
+    if (key === 'back') {
+      amountStr = amountStr.slice(0, -1);
+    } else {
+      // Prevent leading zeros
+      if (amountStr === '0') {
+        amountStr = key;
+      } else {
+        const next = amountStr + key;
+        // Don't allow > 3 digits (max $150)
+        if (parseInt(next, 10) > MAX) return;
+        amountStr = next;
+      }
+    }
+    render();
+  }
+
+  function handleContinue() {
+    const num = parseInt(amountStr, 10) || 0;
+    if (num < MIN || num > MAX) return;
+    // Confirmation flash
+    continueBtn.querySelector('span').textContent = '✓ Done!';
+    continueBtn.style.background = '#204227';
+    setTimeout(() => {
+      continueBtn.querySelector('span').textContent = 'Continue';
+      continueBtn.style.background = '#3b3b3b';
+    }, 1800);
+  }
+
+  render();
+</script>
+</body>
+</html>
