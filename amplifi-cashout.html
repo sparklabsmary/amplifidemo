@@ -7,6 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500&family=Onest:wght@600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="-assets/animations.css" />
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -104,20 +105,6 @@
       white-space: nowrap;
     }
 
-    .cursor-blink {
-      display: inline-block;
-      width: 2px;
-      height: 52px;
-      background: #000;
-      margin-left: 3px;
-      vertical-align: middle;
-      animation: blink 1s step-end infinite;
-      border-radius: 1px;
-    }
-    @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0; }
-    }
 
     .amount-note {
       font-family: 'Inter', sans-serif;
@@ -462,19 +449,17 @@
     <!-- Top bar -->
     <div class="top-bar">
       <a class="pill-btn close-btn" href="amplifi-points.html" aria-label="Back">
-        <img src="https://www.figma.com/api/mcp/asset/85638aa8-417a-40f6-93aa-d567dc0d0d2e" alt="close" />
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M13 8H3M3 8L7 4M3 8L7 12" stroke="#0d0d12" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
       </a>
       <span class="page-title">Convert points to cash</span>
-      <div class="pill-btn right-pill">
-        <img src="https://www.figma.com/api/mcp/asset/b1d05f5b-04bf-4df7-a5bc-527f043317fe" alt="" />
-      </div>
     </div>
 
     <!-- Amount section -->
     <div class="amount-section">
       <div class="amount-display-row">
         <span class="amount-display" id="amountDisplay">$<span id="amountValue">50</span></span>
-        <span class="cursor-blink"></span>
       </div>
       <p class="amount-note">The minimum transfer amount is $5, maximum is $150</p>
       <div class="amount-pills">
@@ -489,7 +474,7 @@
     <div class="account-section">
       <div class="account-row">
         <div class="account-logo">
-          <img src="-assets/TruWest%20Logo.png" alt="TruWest Credit Union" />
+          <img src="-assets/TruWest%20Logo%20Color.png" alt="TruWest Credit Union" />
         </div>
         <div class="account-info">
           <span class="account-name">Checking Account</span>
@@ -500,21 +485,24 @@
     </div>
 
     <!-- Concierge nudge -->
-    <div class="concierge-nudge">
+    <a class="concierge-nudge" href="amplifi-concierge.html?prompt=Help+me+maximize+my+points+to+go+further+than+a+standard+cash+out" style="text-decoration:none;color:inherit;display:flex;">
       <div class="nudge-content">
         <div class="nudge-icon">
           <img src="https://www.figma.com/api/mcp/asset/0dc091b7-f2b9-49f2-a6e4-1fda755e40c2" alt="" />
         </div>
         <div class="nudge-text">
           <p class="nudge-title">Rewards concierge</p>
-          <p class="nudge-body">Don't you want to gain an extra $15 by redeeming for a Walmart gift card instead?</p>
+          <p class="nudge-body">Wait! Before you confirm, I found ways to stretch these points further</p>
         </div>
       </div>
       <div class="nudge-img-wrap">
         <img src="https://www.figma.com/api/mcp/asset/1ee1cc75-b680-4a93-92a9-431f2e02f384" alt="Walmart" />
         <span class="nudge-badge">+10%</span>
       </div>
-    </div>
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;">
+        <path d="M3.333 10H16.667M16.667 10L12.5 5.833M16.667 10L12.5 14.167" stroke="#2a7caa" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </a>
 
   </div><!-- /white-card -->
 
@@ -626,5 +614,6 @@
 
   render();
 </script>
+<script src="-assets/transitions.js"></script>
 </body>
 </html>
