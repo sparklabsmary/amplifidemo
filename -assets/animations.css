@@ -1,0 +1,180 @@
+/* ═══════════════════════════════════════════════════
+   SHARED ANIMATIONS — AmpliFI Demo
+   Included by all four screens
+═══════════════════════════════════════════════════ */
+
+/* ── Page-transition veil ── */
+#page-veil {
+  position: fixed;
+  inset: 0;
+  background: #fff;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+#page-veil.visible {
+  opacity: 1;
+  pointer-events: all;
+}
+
+/* ── Keyframes ── */
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(36px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes heartPop {
+  0%   { transform: scale(1); }
+  35%  { transform: scale(1.4); }
+  65%  { transform: scale(0.88); }
+  100% { transform: scale(1); }
+}
+@keyframes bubbleInUser {
+  from { opacity: 0; transform: translateX(18px) scale(0.95); }
+  to   { opacity: 1; transform: translateX(0)    scale(1);    }
+}
+@keyframes bubbleInAI {
+  from { opacity: 0; transform: translateX(-18px) scale(0.95); }
+  to   { opacity: 1; transform: translateX(0)     scale(1);    }
+}
+@keyframes cardRowIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── White card page-enter slide-up ── */
+.white-card {
+  animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* ── Dark header fades in ── */
+.page-header,
+.logo-wrap,
+.points-pill {
+  animation: fadeIn 0.35s ease both;
+}
+
+/* ── Pill buttons (back / close) ── */
+.pill-btn {
+  transition: transform 0.15s ease !important;
+  cursor: pointer;
+}
+.pill-btn:hover  { transform: scale(1.08); }
+.pill-btn:active { transform: scale(0.93); }
+
+/* ── Category cards (home) ── */
+.category-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+}
+.category-card:hover  { transform: translateY(-3px) scale(1.04); }
+.category-card:active { transform: scale(0.96); }
+
+/* ── Offer cards (home) ── */
+.offer-card {
+  transition: transform 0.22s ease;
+}
+.offer-card:hover  { transform: translateY(-4px); }
+.offer-card:active { transform: scale(0.98); }
+.offer-card-image img.offer-bg {
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.offer-card:hover .offer-card-image img.offer-bg { transform: scale(1.07); }
+
+/* ── Offer fav button (home) ── */
+.offer-fav-btn {
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+.offer-fav-btn:hover  { transform: scale(1.18); }
+.offer-fav-btn.liked  { animation: heartPop 0.38s cubic-bezier(0.16, 1, 0.3, 1) both; }
+
+/* ── How-it-works button (home) ── */
+.how-it-works-btn {
+  transition: background 0.18s ease, transform 0.15s ease !important;
+}
+.how-it-works-btn:hover  { background: rgba(255,255,255,0.28) !important; transform: scale(1.04); }
+.how-it-works-btn:active { transform: scale(0.96); }
+
+/* ── Concierge banner (home) ── */
+.concierge-banner:active { transform: scale(0.99) !important; }
+.concierge-arrow {
+  transform: translateX(-8px);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.concierge-banner:hover .concierge-arrow { transform: translateX(-2px); }
+.concierge-banner:active .concierge-arrow { transform: translateX(-4px); }
+
+/* ── Redeem cards (points) ── */
+.redeem-card {
+  transition: transform 0.22s ease;
+}
+.redeem-card:hover  { transform: translateY(-4px); }
+.redeem-card:active { transform: scale(0.99); }
+/* staggered entrance */
+.redeem-card-1 { animation: fadeInUp 0.4s 0.05s cubic-bezier(0.16,1,0.3,1) both; }
+.redeem-card-2 { animation: fadeInUp 0.4s 0.15s cubic-bezier(0.16,1,0.3,1) both; }
+.redeem-card-3 { animation: fadeInUp 0.4s 0.25s cubic-bezier(0.16,1,0.3,1) both; }
+
+/* ── Redeem link arrow row ── */
+.redeem-link {
+  transition: background 0.18s ease, transform 0.18s ease !important;
+}
+.redeem-link:hover  { transform: translateX(3px); }
+.redeem-link:active { transform: scale(0.98) translateX(0); }
+
+/* ── Tab switching (points) ── */
+.tab { transition: color 0.18s ease, opacity 0.18s ease; }
+
+/* ── Amount pills (cashout) ── */
+.amount-pill {
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+.amount-pill:active        { transform: scale(0.94); }
+.amount-pill.active        { transform: scale(1.05); }
+
+/* ── Concierge nudge banner (cashout) ── */
+.concierge-nudge {
+  transition: background 0.2s ease, transform 0.2s ease !important;
+}
+.concierge-nudge:hover {
+  background: rgba(42,124,170,0.15) !important;
+  transform: translateY(-2px);
+}
+.concierge-nudge:active { transform: scale(0.99); }
+
+/* ── Continue button (cashout) ── */
+.continue-btn {
+  transition: background 0.15s ease, opacity 0.15s ease, transform 0.15s ease, filter 0.15s ease !important;
+}
+.continue-btn:not(.disabled):hover  { filter: brightness(1.1); transform: translateY(-1px); }
+.continue-btn:not(.disabled):active { transform: scale(0.98); filter: brightness(0.95); }
+
+/* ── Chat message bubbles (concierge) ── */
+.msg-row.user { animation: bubbleInUser 0.32s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.msg-row.ai   { animation: bubbleInAI  0.38s cubic-bezier(0.16, 1, 0.3, 1) both; }
+
+/* ── Product cards (concierge) ── */
+.product-card {
+  transition: transform 0.22s ease !important;
+  cursor: pointer;
+}
+.product-card:hover  { transform: translateY(-5px); }
+.product-card:active { transform: scale(0.97); }
+
+/* ── Product card row entrance (concierge) ── */
+.product-cards-row { animation: cardRowIn 0.4s 0.1s cubic-bezier(0.16,1,0.3,1) both; }
+
+/* ── Input focus glow (concierge) ── */
+.input-inner:focus-within {
+  border-color: #2a7caa !important;
+  box-shadow: 0 0 0 3px rgba(42,124,170,0.15);
+}
